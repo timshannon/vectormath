@@ -646,6 +646,11 @@ func (m *Matrix4) SetUpper3x3(mat3 *Matrix3) {
 	m.Col0.SetXYZ(&mat3.Col2)
 }
 
+func (m *Matrix4) Upper3x3(result *Matrix3) {
+	V4GetXYZ(&result.Col0, &m.Col0)
+	V4GetXYZ(&result.Col1, &m.Col1)
+	V4GetXYZ(&result.Col2, &m.Col2)
+}
 func M4GetUpper3x3(result *Matrix3, mat *Matrix4) {
 	V4GetXYZ(&result.Col0, &mat.Col0)
 	V4GetXYZ(&result.Col1, &mat.Col1)

@@ -51,6 +51,10 @@ func V3Lerp(result *Vector3, t float32, vec0, vec1 *Vector3) {
 	V3Add(result, vec0, &tmpV3_1)
 }
 
+func (v *Vector3) Lerp(t float32, vecTo *Vector3) {
+	V3Lerp(v, t, v, vecTo)
+}
+
 func V3Slerp(result *Vector3, t float32, unitVec0, unitVec1 *Vector3) {
 	var tmpV3_0, tmpV3_1 Vector3
 	var scale0, scale1 float32
@@ -67,6 +71,10 @@ func V3Slerp(result *Vector3, t float32, unitVec0, unitVec1 *Vector3) {
 	V3ScalarMul(&tmpV3_0, unitVec0, scale0)
 	V3ScalarMul(&tmpV3_1, unitVec1, scale1)
 	V3Add(result, &tmpV3_0, &tmpV3_1)
+}
+
+func (v *Vector3) Slerp(t float32, vecTo *Vector3) {
+	V3Slerp(v, t, v, vecTo)
 }
 
 func (v *Vector3) SetElem(index int, value float32) {
@@ -126,6 +134,10 @@ func V3Neg(result, vec *Vector3) {
 	result.X = -vec.X
 	result.Y = -vec.Y
 	result.Z = -vec.Z
+}
+
+func (v *Vector3) Neg() {
+	V3Neg(v, v)
 }
 
 func V3MulPerElem(result, vec0, vec1 *Vector3) {
@@ -247,6 +259,10 @@ func V3Normalize(result, vec *Vector3) {
 	result.Z = vec.Z * lenInv
 }
 
+func (v *Vector3) Normalize() {
+	V3Normalize(v, v)
+}
+
 func V3Cross(result, vec0, vec1 *Vector3) {
 	tmpX := vec0.Y*vec1.Z - vec0.Z*vec1.Y
 	tmpY := vec0.Z*vec1.X - vec0.X*vec1.Z
@@ -342,6 +358,14 @@ func V4Lerp(result *Vector4, t float32, vec0, vec1 *Vector4) {
 	V4Add(result, vec0, &tmpV4_1)
 }
 
+func (v *Vector4) Lerp(t float32, vecTo *Vector4) {
+	V4Lerp(v, t, v, vecTo)
+}
+
+func (v *Vector4) Slerp(t float32, vecTo *Vector4) {
+	V4Slerp(v, t, v, vecTo)
+}
+
 func V4Slerp(result *Vector4, t float32, unitVec0, unitVec1 *Vector4) {
 	var tmpV4_0, tmpV4_1 Vector4
 	var scale0, scale1 float32
@@ -430,6 +454,10 @@ func V4Neg(result, vec *Vector4) {
 	result.Y = -vec.Y
 	result.Z = -vec.Z
 	result.W = -vec.W
+}
+
+func (v *Vector4) Neg() {
+	V4Neg(v, v)
 }
 
 func V4MulPerElem(result, vec0, vec1 *Vector4) {
@@ -570,6 +598,10 @@ func V4Normalize(result, vec *Vector4) {
 	result.W = vec.W * lenInv
 }
 
+func (v *Vector4) Normalize() {
+	V4Normalize(v, v)
+}
+
 func V4Select(result, vec0, vec1 *Vector4, select1 int) {
 	if select1 != 0 {
 		result.X = vec1.X
@@ -621,16 +653,8 @@ func P3Lerp(result *Point3, t float32, pnt0, pnt1 *Point3) {
 	P3AddV3(result, pnt0, &tmpV3_1)
 }
 
-func (p *Point3) SetX(x float32) {
-	p.X = x
-}
-
-func (p *Point3) SetY(y float32) {
-	p.Y = y
-}
-
-func (p *Point3) SetZ(z float32) {
-	p.Z = z
+func (p *Point3) Lerp(t float32, pointTo *Point3) {
+	P3Lerp(p, t, p, pointTo)
 }
 
 func (p *Point3) SetElem(index int, value float32) {
