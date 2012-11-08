@@ -46,18 +46,6 @@ func M3MakeFromCols(result *Matrix3, col0, col1, col2 *Vector3) {
 	V3Copy(&result.Col2, col2)
 }
 
-func (m *Matrix3) SetCol0(col0 *Vector3) {
-	V3Copy(&m.Col0, col0)
-}
-
-func (m *Matrix3) SetCol1(col1 *Vector3) {
-	V3Copy(&m.Col1, col1)
-}
-
-func (m *Matrix3) SetCol2(col2 *Vector3) {
-	V3Copy(&m.Col2, col2)
-}
-
 func (m *Matrix3) SetCol(col int, vec *Vector3) {
 	switch col {
 	case 0:
@@ -88,18 +76,6 @@ func (m *Matrix3) GetElem(col, row int) float32 {
 	return tmpV3_0.GetElem(row)
 }
 
-func M3GetCol0(result *Vector3, mat *Matrix3) {
-	V3Copy(result, &mat.Col0)
-}
-
-func M3GetCol1(result *Vector3, mat *Matrix3) {
-	V3Copy(result, &mat.Col1)
-}
-
-func M3GetCol2(result *Vector3, mat *Matrix3) {
-	V3Copy(result, &mat.Col2)
-}
-
 func M3GetCol(result *Vector3, mat *Matrix3, col int) {
 	switch col {
 	case 0:
@@ -126,6 +102,10 @@ func M3Transpose(result, mat *Matrix3) {
 	M3Copy(result, &tmpResult)
 }
 
+func (m *Matrix3) Transpose() {
+	M3Transpose(m, m)
+}
+
 func M3Inverse(result, mat *Matrix3) {
 	var tmp0, tmp1, tmp2 Vector3
 	V3Cross(&tmp0, &mat.Col1, &mat.Col2)
@@ -135,6 +115,10 @@ func M3Inverse(result, mat *Matrix3) {
 	V3MakeFromElems(&result.Col0, tmp0.X*detinv, tmp1.X*detinv, tmp2.X*detinv)
 	V3MakeFromElems(&result.Col1, tmp0.Y*detinv, tmp1.Y*detinv, tmp2.Y*detinv)
 	V3MakeFromElems(&result.Col2, tmp0.Z*detinv, tmp1.Z*detinv, tmp2.Z*detinv)
+}
+
+func (m *Matrix3) Invert() {
+	M3Inverse(m, m)
 }
 
 func (m *Matrix3) Determinant() float32 {
@@ -159,6 +143,10 @@ func M3Neg(result, mat *Matrix3) {
 	V3Neg(&result.Col0, &mat.Col0)
 	V3Neg(&result.Col1, &mat.Col1)
 	V3Neg(&result.Col2, &mat.Col2)
+}
+
+func (m *Matrix3) Neg() {
+	M3Neg(m, m)
 }
 
 func M3AbsPerElem(result, mat *Matrix3) {
@@ -333,22 +321,6 @@ func M4MakeFromQV3(result *Matrix4, unitQuat *Quat, translateVec *Vector3) {
 	V4MakeFromV3Scalar(&result.Col3, translateVec, 1.0)
 }
 
-func (m *Matrix4) SetCol0(col0 *Vector4) {
-	V4Copy(&m.Col0, col0)
-}
-
-func (m *Matrix4) SetCol1(col1 *Vector4) {
-	V4Copy(&m.Col1, col1)
-}
-
-func (m *Matrix4) SetCol2(col2 *Vector4) {
-	V4Copy(&m.Col2, col2)
-}
-
-func (m *Matrix4) SetCol3(col3 *Vector4) {
-	V4Copy(&m.Col3, col3)
-}
-
 func (m *Matrix4) SetCol(col int, vec *Vector4) {
 	switch col {
 	case 0:
@@ -382,22 +354,6 @@ func (m *Matrix4) GetElem(col, row int) float32 {
 	return tmpV4_0.GetElem(row)
 }
 
-func M4GetCol0(result *Vector4, mat *Matrix4) {
-	V4Copy(result, &mat.Col0)
-}
-
-func M4GetCol1(result *Vector4, mat *Matrix4) {
-	V4Copy(result, &mat.Col1)
-}
-
-func M4GetCol2(result *Vector4, mat *Matrix4) {
-	V4Copy(result, &mat.Col2)
-}
-
-func M4GetCol3(result *Vector4, mat *Matrix4) {
-	V4Copy(result, &mat.Col3)
-}
-
 func M4GetCol(result *Vector4, mat *Matrix4, col int) {
 	switch col {
 	case 0:
@@ -422,6 +378,10 @@ func M4Transpose(result, mat *Matrix4) {
 	V4MakeFromElems(&tmpResult.Col2, mat.Col0.Z, mat.Col1.Z, mat.Col2.Z, mat.Col3.Z)
 	V4MakeFromElems(&tmpResult.Col3, mat.Col0.W, mat.Col1.W, mat.Col2.W, mat.Col3.W)
 	M4Copy(result, &tmpResult)
+}
+
+func (m *Matrix4) Transpose() {
+	M4Transpose(m, m)
 }
 
 func M4Inverse(result, mat *Matrix4) {
@@ -489,6 +449,10 @@ func M4Inverse(result, mat *Matrix4) {
 	V4ScalarMul(&result.Col3, &res3, detInv)
 }
 
+func (m *Matrix4) Invert() {
+	M4Inverse(m, m)
+}
+
 func M4AffineInverse(result, mat *Matrix4) {
 	var affineMat, tmpT3_0 Transform3
 	var tmpV3_0, tmpV3_1, tmpV3_2, tmpV3_3 Vector3
@@ -496,12 +460,16 @@ func M4AffineInverse(result, mat *Matrix4) {
 	V4GetXYZ(&tmpV3_1, &mat.Col1)
 	V4GetXYZ(&tmpV3_2, &mat.Col2)
 	V4GetXYZ(&tmpV3_3, &mat.Col3)
-	affineMat.SetCol0(&tmpV3_0)
-	affineMat.SetCol1(&tmpV3_1)
-	affineMat.SetCol2(&tmpV3_2)
-	affineMat.SetCol3(&tmpV3_3)
+	affineMat.SetCol(0, &tmpV3_0)
+	affineMat.SetCol(1, &tmpV3_1)
+	affineMat.SetCol(2, &tmpV3_2)
+	affineMat.SetCol(3, &tmpV3_3)
 	T3Inverse(&tmpT3_0, &affineMat)
 	M4MakeFromT3(result, &tmpT3_0)
+}
+
+func (m *Matrix4) AffineInvert() {
+	M4AffineInverse(m, m)
 }
 
 func M4OrthoInverse(result, mat *Matrix4) {
@@ -511,12 +479,16 @@ func M4OrthoInverse(result, mat *Matrix4) {
 	V4GetXYZ(&tmpV3_1, &mat.Col1)
 	V4GetXYZ(&tmpV3_2, &mat.Col2)
 	V4GetXYZ(&tmpV3_3, &mat.Col3)
-	affineMat.SetCol0(&tmpV3_0)
-	affineMat.SetCol1(&tmpV3_1)
-	affineMat.SetCol2(&tmpV3_2)
-	affineMat.SetCol3(&tmpV3_3)
+	affineMat.SetCol(0, &tmpV3_0)
+	affineMat.SetCol(1, &tmpV3_1)
+	affineMat.SetCol(2, &tmpV3_2)
+	affineMat.SetCol(3, &tmpV3_3)
 	T3OrthoInverse(&tmpT3_0, &affineMat)
 	M4MakeFromT3(result, &tmpT3_0)
+}
+
+func (m *Matrix4) OrthoInvert() {
+	M4OrthoInverse(m, m)
 }
 
 func (m *Matrix4) Determinant() float32 {
@@ -568,6 +540,10 @@ func M4Neg(result, mat *Matrix4) {
 	V4Neg(&result.Col1, &mat.Col1)
 	V4Neg(&result.Col2, &mat.Col2)
 	V4Neg(&result.Col3, &mat.Col3)
+}
+
+func (m *Matrix4) Neg() {
+	M4Neg(m, m)
 }
 
 func M4AbsPerElem(result, mat *Matrix4) {
@@ -663,6 +639,10 @@ func (m *Matrix4) SetTranslation(translateVec *Vector3) {
 
 func M4GetTranslation(result *Vector3, mat *Matrix4) {
 	V4GetXYZ(result, &mat.Col3)
+}
+
+func (m *Matrix4) Translation(result *Vector3) {
+	M4GetTranslation(result, m)
 }
 
 func M4MakeRotationX(result *Matrix4, radians float32) {
@@ -861,22 +841,6 @@ func T3MakeFromQV3(result *Transform3, unitQuat *Quat, translateVec *Vector3) {
 	result.SetTranslation(translateVec)
 }
 
-func (t *Transform3) SetCol0(col0 *Vector3) {
-	V3Copy(&t.Col0, col0)
-}
-
-func (t *Transform3) SetCol1(col1 *Vector3) {
-	V3Copy(&t.Col1, col1)
-}
-
-func (t *Transform3) SetCol2(col2 *Vector3) {
-	V3Copy(&t.Col2, col2)
-}
-
-func (t *Transform3) SetCol3(col3 *Vector3) {
-	V3Copy(&t.Col3, col3)
-}
-
 func (t *Transform3) SetCol(col int, vec *Vector3) {
 	switch col {
 	case 0:
@@ -908,22 +872,6 @@ func (t *Transform3) GetElem(col, row int) float32 {
 	var tmpV3_0 Vector3
 	T3GetCol(&tmpV3_0, t, col)
 	return tmpV3_0.GetElem(row)
-}
-
-func T3GetCol0(result *Vector3, tfrm *Transform3) {
-	V3Copy(result, &tfrm.Col0)
-}
-
-func T3GetCol1(result *Vector3, tfrm *Transform3) {
-	V3Copy(result, &tfrm.Col1)
-}
-
-func T3GetCol2(result *Vector3, tfrm *Transform3) {
-	V3Copy(result, &tfrm.Col2)
-}
-
-func T3GetCol3(result *Vector3, tfrm *Transform3) {
-	V3Copy(result, &tfrm.Col3)
 }
 
 func T3GetCol(result *Vector3, tfrm *Transform3, col int) {
@@ -964,6 +912,10 @@ func T3Inverse(result, tfrm *Transform3) {
 	V3Copy(&result.Col3, &tmpV3_5)
 }
 
+func (t *Transform3) Invert() {
+	T3Inverse(t, t)
+}
+
 func T3OrthoInverse(result, tfrm *Transform3) {
 	var inv0, inv1, inv2, tmpV3_0, tmpV3_1, tmpV3_2, tmpV3_3, tmpV3_4, tmpV3_5 Vector3
 	V3MakeFromElems(&inv0, tfrm.Col0.X, tfrm.Col1.X, tfrm.Col2.X)
@@ -979,6 +931,10 @@ func T3OrthoInverse(result, tfrm *Transform3) {
 	V3Add(&tmpV3_4, &tmpV3_0, &tmpV3_3)
 	V3Neg(&tmpV3_5, &tmpV3_4)
 	V3Copy(&result.Col3, &tmpV3_5)
+}
+
+func (t *Transform3) OrthoInvert() {
+	T3OrthoInverse(t, t)
 }
 
 func T3AbsPerElem(result, tfrm *Transform3) {
@@ -1038,12 +994,20 @@ func T3GetUpper3x3(result *Matrix3, tfrm *Transform3) {
 	M3MakeFromCols(result, &tfrm.Col0, &tfrm.Col1, &tfrm.Col2)
 }
 
+func (t *Transform3) Upper3x3(result *Matrix3) {
+	T3GetUpper3x3(result, t)
+}
+
 func (t *Transform3) SetTranslation(translateVec *Vector3) {
 	V3Copy(&t.Col3, translateVec)
 }
 
 func T3GetTranslation(result *Vector3, tfrm *Transform3) {
 	V3Copy(result, &tfrm.Col3)
+}
+
+func (t *Transform3) Translation(result *Vector3) {
+	T3GetTranslation(result, t)
 }
 
 func T3MakeRotationX(result *Transform3, radians float32) {
