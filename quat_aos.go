@@ -22,7 +22,7 @@ func QMakeFromElems(result *Quat, x, y, z, w float32) {
 
 func QMakeFromV3Scalar(result *Quat, xyz *Vector3, w float32) {
 	result.SetXYZ(xyz)
-	result.SetW(w)
+	result.W = w
 }
 
 func QMakeFromV4(result *Quat, vec *Vector4) {
@@ -50,6 +50,10 @@ func QLerp(result *Quat, t float32, quat0, quat1 *Quat) {
 	QAdd(result, quat0, &tmpQ_1)
 }
 
+func (q *Quat) Lerp(t float32, quatTo *Quat) {
+	QLerp(q, t, q, quatTo)
+}
+
 func QSlerp(result *Quat, t float32, unitQuat0, unitQuat1 *Quat) {
 	var start, tmpQ_0, tmpQ_1 Quat
 	var scale0, scale1 float32
@@ -74,6 +78,10 @@ func QSlerp(result *Quat, t float32, unitQuat0, unitQuat1 *Quat) {
 	QAdd(result, &tmpQ_0, &tmpQ_1)
 }
 
+func (q *Quat) Slerp(t float32, quatTo *Quat) {
+	QSlerp(q, t, q, quatTo)
+}
+
 func QSquad(result *Quat, t float32, unitQuat0, unitQuat1, unitQuat2, unitQuat3 *Quat) {
 	var tmp0, tmp1 Quat
 	QSlerp(&tmp0, t, unitQuat0, unitQuat3)
@@ -85,22 +93,6 @@ func (q *Quat) SetXYZ(vec *Vector3) {
 	q.X = vec.X
 	q.Y = vec.Y
 	q.Z = vec.Z
-}
-
-func (q *Quat) SetX(x float32) {
-	q.X = x
-}
-
-func (q *Quat) SetY(y float32) {
-	q.Y = y
-}
-
-func (q *Quat) SetZ(z float32) {
-	q.Z = z
-}
-
-func (q *Quat) SetW(w float32) {
-	q.W = w
 }
 
 func (q *Quat) SetElem(index int, value float32) {
@@ -202,6 +194,10 @@ func QNormalize(result, quat *Quat) {
 	result.W = quat.W * lenInv
 }
 
+func (q *Quat) Normalize() {
+	QNormalize(q, q)
+}
+
 func QMakeRotationArc(result *Quat, unitVec0, unitVec1 *Vector3) {
 	var tmpV3_0, tmpV3_1 Vector3
 	cosHalfAngleX2 := sqrt((2.0 * (1.0 + V3Dot(unitVec0, unitVec1))))
@@ -261,6 +257,10 @@ func QRotate(result *Vector3, quat *Quat, vec *Vector3) {
 
 func QConj(result, quat *Quat) {
 	QMakeFromElems(result, -quat.X, -quat.Y, -quat.Z, quat.W)
+}
+
+func (q *Quat) Conjugate() {
+	QConj(q, q)
 }
 
 func QSelect(result, quat0, quat1 *Quat, select1 int) {
