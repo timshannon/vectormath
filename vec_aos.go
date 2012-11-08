@@ -69,18 +69,6 @@ func V3Slerp(result *Vector3, t float32, unitVec0, unitVec1 *Vector3) {
 	V3Add(result, &tmpV3_0, &tmpV3_1)
 }
 
-func (v *Vector3) SetX(x float32) {
-	v.X = x
-}
-
-func (v *Vector3) SetY(y float32) {
-	v.Y = y
-}
-
-func (v *Vector3) SetZ(z float32) {
-	v.Z = z
-}
-
 func (v *Vector3) SetElem(index int, value float32) {
 	switch index {
 	case 0:
@@ -300,7 +288,7 @@ func V4MakeFromElems(result *Vector4, x, y, z, w float32) {
 
 func V4MakeFromV3Scalar(result *Vector4, xyz *Vector3, w float32) {
 	result.SetXYZ(xyz)
-	result.SetW(w)
+	result.W = w
 }
 
 func V4MakeFromV3(result *Vector4, vec *Vector3) {
@@ -380,22 +368,6 @@ func (v *Vector4) SetXYZ(vec *Vector3) {
 
 func V4GetXYZ(result *Vector3, vec *Vector4) {
 	V3MakeFromElems(result, vec.X, vec.Y, vec.Z)
-}
-
-func (v *Vector4) SetX(x float32) {
-	v.X = x
-}
-
-func (v *Vector4) SetY(y float32) {
-	v.Y = y
-}
-
-func (v *Vector4) SetZ(z float32) {
-	v.Z = z
-}
-
-func (v *Vector4) SetW(w float32) {
-	v.W = w
 }
 
 func (v *Vector4) SetElem(index int, value float32) {

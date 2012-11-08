@@ -21,13 +21,13 @@ type Quat struct {
 }
 
 type Matrix3 struct {
-	col0, col1, col2 Vector3
+	Col0, Col1, Col2 Vector3
 }
 
 type Matrix4 struct {
-	col0, col1, col2, col3 Vector4
+	Col0, Col1, Col2, Col3 Vector4
 }
 
 type Transform3 struct {
-	col0, col1, col2, col3 Vector3
+	Col0, Col1, Col2, Col3 Vector3
 }
