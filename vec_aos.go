@@ -282,6 +282,14 @@ func V3Select(result, vec0, vec1 *Vector3, select1 int) {
 	}
 }
 
+func V3Velocity(result, start, end *Vector3, elapsedTime float32) {
+	//change in position / elapsedTime
+	V3Sub(result, start, end)
+	result.X = result.X / elapsedTime
+	result.Y = result.Y / elapsedTime
+	result.Z = result.Z / elapsedTime
+}
+
 func (v *Vector3) String() string {
 	return fmt.Sprintf("( %f %f %f )\n", v.X, v.Y, v.Z)
 }
